@@ -50,18 +50,29 @@ export default function Page() {
           </div>
          
           </div>
+          
           </>
       ))}
-      <div className='w-[240px] bg-blue-500 h-[240px] rounded-2xl hover:border-2 hover:bg-slate-50'>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-19">
+      <div className='w-[240px] bg-black h-[240px] rounded-2xl hover:border-2 h'>
+      <svg
+       xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-19 ">
   <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
 </svg>
 <h1 
-className=''
+className='text-gray-400 text-3xl mt-1'
 >
-add profile</h1>
+Add new user</h1>
 
       </div>
+
+     
+    </div>
+    <div>
+    <button
+    className='text-3xl text-gray-400 border-2 border-gray-400 py-2 px-4 hover:border-white hover:text-white'
+    >
+    Manage Profiles
+    </button>
     </div>
   </div>
   );
