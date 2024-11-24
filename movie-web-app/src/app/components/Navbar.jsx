@@ -6,6 +6,18 @@ import Link from 'next/link'
 export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false)
   const [showAuthMenu, setShowAuthMenu] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  // Function to handle menu toggles
+  const handleMenuToggle = (menu) => {
+    if (menu === 'auth') {
+      setShowAuthMenu(!showAuthMenu)
+      setIsMobileMenuOpen(false)
+    } else if (menu === 'mobile') {
+      setIsMobileMenuOpen(!isMobileMenuOpen)
+      setShowAuthMenu(false)
+    }
+  }
 
   return (
     <div className='fixed top-0 left-0 right-0 z-50'>
@@ -18,10 +30,11 @@ export default function Navbar() {
               width={60}
               height={60}
               alt='CarLuxe'
-              className='mr-8 hover:opacity-80 transition-all rounded-2xl'
+              className='mr-4 md:mr-8 hover:opacity-80 transition-all rounded-2xl'
             />
           </Link>
-          <ul className='text-white flex gap-8 items-center'>
+          {/* Desktop Menu */}
+          <ul className='hidden md:flex text-white gap-8 items-center'>
             <li>
               <Link href='/' className='hover:text-red-500 transition-colors font-medium hover:scale-105 inline-block'>Home</Link>
             </li>
@@ -44,8 +57,9 @@ export default function Navbar() {
         </div>
 
         {/* right side navigation*/}
-        <div className='text-white flex items-center gap-6 relative'>
-          <div className='flex items-center'>
+        <div className='text-white flex items-center gap-4 md:gap-6 relative'>
+          {/* Search - Hidden on mobile */}
+          <div className='hidden md:flex items-center'>
             <div className='mr-2 w-64'>
               <input
                 type="text"
@@ -55,7 +69,6 @@ export default function Navbar() {
             </div>
             <button 
               onClick={() => {
-                // Search functionality will be added later
                 console.log('Search clicked');
               }}
               className='hover:text-red-500 transition-colors p-2 hover:bg-white/10 rounded-full'
@@ -65,9 +78,11 @@ export default function Navbar() {
               </svg>
             </button>
           </div>
+
+          {/* Auth Menu */}
           <div className='relative'>
             <button
-              onClick={() => setShowAuthMenu(!showAuthMenu)}
+              onClick={() => handleMenuToggle('auth')}
               className='hover:text-red-500 transition-colors p-2 hover:bg-white/10 rounded-full'
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -83,8 +98,9 @@ export default function Navbar() {
                   <p className="text-sm font-medium text-gray-500">Welcome!</p>
                 </div>
                 <Link 
-                  href='/login' 
+                  href='/pages/Login' 
                   className="flex items-center px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                  onClick={() => setShowAuthMenu(false)}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
@@ -92,8 +108,9 @@ export default function Navbar() {
                   <span className="font-medium">Login</span>
                 </Link>
                 <Link 
-                  href='/signup' 
+                  href='/pages/Register' 
                   className="flex items-center px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                  onClick={() => setShowAuthMenu(false)}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
@@ -103,8 +120,49 @@ export default function Navbar() {
               </div>
             )}
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => handleMenuToggle('mobile')}
+            className='md:hidden p-2 hover:bg-white/10 rounded-full'
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="h-6 w-6" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              {isMobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-black/95 backdrop-blur-sm">
+          <div className="px-4 pt-2 pb-4 space-y-1">
+            <Link href='/' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Home</Link>
+            <Link href='/inventory' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Inventory</Link>
+            <Link href='/categories' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Categories</Link>
+            <Link href='/featured' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Featured</Link>
+            <Link href='/about' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>About Us</Link>
+            <Link href='/contact' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Contact</Link>
+            <div className='pt-2'>
+              <input
+                type="text"
+                placeholder="Search vehicles..."
+                className='w-full px-4 py-2 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-400'
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

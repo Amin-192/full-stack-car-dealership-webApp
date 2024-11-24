@@ -5,34 +5,48 @@ export default function featuredCars() {
   return (
     <div>
        {/* Featured Cars */}
-       <section className="bg-gray-50 py-24 px-4">
+       <section className="bg-gradient-to-b from-gray-50 to-white py-24 px-4">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-16">Featured Vehicles</h2>
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-black">Featured Vehicles</h2>
+            <div className="w-24 h-1 bg-red-600 mx-auto mt-4 rounded-full"></div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {[1, 2, 3].map((item) => (
-              <div key={item} className="bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                <div className="relative h-56">
-                  <div className="absolute top-4 right-4 z-10 bg-red-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+              <div key={item} className="group bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
+                <div className="relative h-64">
+                  <div className="absolute top-4 right-4 z-10 bg-gradient-to-r from-red-500 to-red-700 text-white px-4 py-1 rounded-full text-sm font-semibold backdrop-blur-sm">
                     Featured
                   </div>
                   <Image
                     src={`/car-${item}.jpg`}
                     alt={`Featured car ${item}`}
                     fill
-                    className="object-cover"
+                    className="object-cover transform transition-transform duration-700 group-hover:scale-110"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 <div className="p-8">
-                  <h3 className="text-2xl font-bold mb-3">Premium Car {item}</h3>
-                  <div className="flex justify-between items-center mb-6">
-                    <p className="text-gray-600">Starting from</p>
-                    <p className="text-2xl font-bold text-red-600">$50,000</p>
+                  <h3 className="text-2xl font-bold mb-3 group-hover:text-red-600 transition-colors">Premium Car {item}</h3>
+                  <div className="space-y-4 mb-6">
+                    <div className="flex items-center text-gray-600">
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                      <span>400+ Horsepower</span>
+                    </div>
+                    <div className="flex items-center text-gray-600">
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                      <span>0-60 in 3.5s</span>
+                    </div>
+                    <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+                      <p className="text-gray-600 font-medium">Starting from</p>
+                      <p className="text-3xl font-bold text-red-600">$50,000</p>
+                    </div>
                   </div>
                   <Link 
                     href={`/car/${item}`}
-                    className="block text-center bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors"
+                    className="block text-center bg-gradient-to-r from-red-600 to-red-700 text-white py-3 rounded-lg hover:from-black hover:to-gray-800 transition-all duration-300 transform hover:scale-105"
                   >
-                    View Details
+                    Explore Details
                   </Link>
                 </div>
               </div>
