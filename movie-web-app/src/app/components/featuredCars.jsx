@@ -19,7 +19,7 @@ export default function featuredCars() {
                     Featured
                   </div>
                   <Image
-                    src={`/car-${item}.jpg`}
+                    src={''}
                     alt={`Featured car ${item}`}
                     fill
                     className="object-cover transform transition-transform duration-700 group-hover:scale-110"
@@ -43,7 +43,7 @@ export default function featuredCars() {
                     </div>
                   </div>
                   <Link 
-                    href={`/car/${item}`}
+                    href={''}
                     className="block text-center bg-gradient-to-r from-red-600 to-red-700 text-white py-3 rounded-lg hover:from-black hover:to-gray-800 transition-all duration-300 transform hover:scale-105"
                   >
                     Explore Details

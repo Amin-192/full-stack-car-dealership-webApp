@@ -23,7 +23,7 @@ export default function Page() {
                     Featured
                   </div>
                   <Image
-                    src={`/car-${item}.jpg`}
+                    src={''}
                     alt={`Featured car ${item}`}
                     fill
                     className="object-cover"

@@ -7,7 +7,7 @@ export default function Hero() {
        {/* Hero Section */}
        <section className="relative h-[90vh] flex items-center justify-center">
         <Image
-          src="/hero-car.jpg"
+          src=""
           alt="Luxury car"
           fill
           className="object-cover"

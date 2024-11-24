@@ -1,21 +1,22 @@
-
 import "./globals.css";
 import Navbar from "./components/Navbar";
-
+import Provider from "./components/Provider";
 
 export const metadata = {
-  title: "Z-MOVIES",
-  description: "movie web app",
+  title: "CarLuxe",
+  description: "Luxury Car Rentals",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={''}
-      >
-         <Navbar/>
-        {children}
+      <body>
+        <Provider>
+          <main className="app">
+            <Navbar />
+            {children}
+          </main>
+        </Provider>
       </body>
     </html>
   );

@@ -1,12 +1,29 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { signIn, signOut, useSession, getProviders } from 'next-auth/react'
 
 export default function Navbar() {
+  const { data: session } = useSession()
   const [showSearch, setShowSearch] = useState(false)
   const [showAuthMenu, setShowAuthMenu] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [providers, setProviders] = useState(null)
+
+  useEffect(() => {
+    const fetchProviders = async () => {
+      const response = await getProviders()
+      setProviders(response)
+    }
+    fetchProviders()
+  }, [])
+
+  useEffect(() => {
+    if (session) {
+      console.log('Current session:', session)
+    }
+  }, [session])
 
   // Function to handle menu toggles
   const handleMenuToggle = (menu) => {
@@ -81,43 +98,74 @@ export default function Navbar() {
 
           {/* Auth Menu */}
           <div className='relative'>
-            <button
-              onClick={() => handleMenuToggle('auth')}
-              className='hover:text-red-500 transition-colors p-2 hover:bg-white/10 rounded-full'
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </button>
-            {showAuthMenu && (
-              <div 
-                className="absolute right-0 mt-2 w-56 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl py-3 transform transition-all duration-300 ease-out border border-gray-100"
-                style={{ transitionDelay: '100ms' }}
-              >
-                <div className="px-4 py-2 border-b border-gray-100">
-                  <p className="text-sm font-medium text-gray-500">Welcome!</p>
-                </div>
-                <Link 
-                  href='/pages/Login' 
-                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
-                  onClick={() => setShowAuthMenu(false)}
+            {session ? (
+              <div className='flex items-center gap-4'>
+                <span className='text-sm'>{session.user.name}</span>
+                <button
+                  onClick={() => handleMenuToggle('auth')}
+                  className='hover:text-red-500 transition-colors p-2 hover:bg-white/10 rounded-full'
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                  </svg>
-                  <span className="font-medium">Login</span>
-                </Link>
-                <Link 
-                  href='/pages/Register' 
-                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
-                  onClick={() => setShowAuthMenu(false)}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                  </svg>
-                  <span className="font-medium">Sign Up</span>
-                </Link>
+                  <Image
+                    src={session.user.image || '/user.png'}
+                    width={30}
+                    height={30}
+                    alt={session.user.name}
+                    className='rounded-full'
+                  />
+                </button>
+                {showAuthMenu && (
+                  <div 
+                    className="absolute right-0 mt-12 w-56 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl py-3 transform transition-all duration-300 ease-out border border-gray-100"
+                    style={{ transitionDelay: '100ms' }}
+                  >
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-500">Welcome, {session.user.name}!</p>
+                    </div>
+                    <button 
+                      onClick={() => signOut()}
+                      className="flex w-full items-center px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                      <span className="font-medium">Sign Out</span>
+                    </button>
+                  </div>
+                )}
               </div>
+            ) : (
+              <>
+                <button
+                  onClick={() => handleMenuToggle('auth')}
+                  className='hover:text-red-500 transition-colors p-2 hover:bg-white/10 rounded-full'
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </button>
+                {showAuthMenu && providers && (
+                  <div 
+                    className="absolute right-0 mt-12 w-56 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl py-3 transform transition-all duration-300 ease-out border border-gray-100"
+                    style={{ transitionDelay: '100ms' }}
+                  >
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-500">Welcome!</p>
+                    </div>
+                    {Object.values(providers).map((provider) => (
+                      <button
+                        key={provider.name}
+                        onClick={() => signIn(provider.id)}
+                        className="flex w-full items-center px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                        </svg>
+                        <span className="font-medium">Sign in with {provider.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
 
@@ -160,6 +208,14 @@ export default function Navbar() {
                 className='w-full px-4 py-2 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-red-500 placeholder-gray-400'
               />
             </div>
+            {session && (
+              <button 
+                onClick={() => signOut()}
+                className='block w-full text-left px-3 py-2 text-white hover:bg-red-500 rounded-lg'
+              >
+                Sign Out
+              </button>
+            )}
           </div>
         </div>
       )}

@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -12,6 +13,29 @@ export default function LoginPage() {
     // Handle login logic here
     console.log('Login attempted with:', email, password)
   }
+
+  const [error, setError] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
+
+const handleGoogleSignIn = async () => {
+  try {
+    setIsLoading(true);
+    const result = await signIn('google', {
+      callbackUrl: '/',
+      redirect: true
+    });
+    
+    if (result?.error) {
+      setError(result.error);
+    }
+  } catch (error) {
+    setError('An error occurred during sign in');
+    console.error('Sign in error:', error);
+  } finally {
+    setIsLoading(false);
+  }
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black py-12 px-4 sm:px-6 lg:px-8 mt-10">
@@ -98,6 +122,12 @@ export default function LoginPage() {
           </div>
         </form>
 
+        {error && (
+          <div className="text-red-500 text-sm text-center mt-2">
+            {error}
+          </div>
+        )}
+
         <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -109,12 +139,22 @@ export default function LoginPage() {
           </div>
 
           <div className="mt-6 grid grid-cols-2 gap-3">
-            <button className="w-full flex items-center justify-center px-4 py-2 border border-white/20 rounded-lg text-white bg-white/10 hover:bg-white/20 transition-all">
-              <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
-              </svg>
-              Google
-            </button>
+          <button 
+  onClick={handleGoogleSignIn}
+  disabled={isLoading}
+  className="w-full flex items-center justify-center px-4 py-2 border border-white/20 rounded-lg text-white bg-white/10 hover:bg-white/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+>
+  {isLoading ? (
+    <span>Loading...</span>
+  ) : (
+    <>
+      <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
+      </svg>
+      Google
+    </>
+  )}
+</button>
             <button className="w-full flex items-center justify-center px-4 py-2 border border-white/20 rounded-lg text-white bg-white/10 hover:bg-white/20 transition-all">
               <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84"/>
