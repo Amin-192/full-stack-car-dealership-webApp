@@ -2,22 +2,13 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { signIn, signOut, useSession, getProviders } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 
 export default function Navbar() {
   const { data: session } = useSession()
   const [showSearch, setShowSearch] = useState(false)
   const [showAuthMenu, setShowAuthMenu] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [providers, setProviders] = useState(null)
-
-  useEffect(() => {
-    const fetchProviders = async () => {
-      const response = await getProviders()
-      setProviders(response)
-    }
-    fetchProviders()
-  }, [])
 
   useEffect(() => {
     if (session) {
@@ -115,10 +106,10 @@ export default function Navbar() {
                 </button>
                 {showAuthMenu && (
                   <div 
-                    className="absolute right-0 mt-12 w-56 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl py-3 transform transition-all duration-300 ease-out border border-gray-100"
+                    className="absolute right-0 mt-48 w-56 bg-white/95 backdrop-blur-sm rounded-2xl  shadow-2xl py-3 transform transition-all duration-300 ease-out border border-gray-100"
                     style={{ transitionDelay: '100ms' }}
                   >
-                    <div className="px-4 py-2 border-b border-gray-100">
+                    <div className="px-4 py-2 border-b border-gray-100 ">
                       <p className="text-sm font-medium text-gray-500">Welcome, {session.user.name}!</p>
                     </div>
                     <button 
@@ -143,7 +134,7 @@ export default function Navbar() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </button>
-                {showAuthMenu && providers && (
+                {showAuthMenu && (
                   <div 
                     className="absolute right-0 mt-12 w-56 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl py-3 transform transition-all duration-300 ease-out border border-gray-100"
                     style={{ transitionDelay: '100ms' }}
@@ -151,18 +142,14 @@ export default function Navbar() {
                     <div className="px-4 py-2 border-b border-gray-100">
                       <p className="text-sm font-medium text-gray-500">Welcome!</p>
                     </div>
-                    {Object.values(providers).map((provider) => (
-                      <button
-                        key={provider.name}
-                        onClick={() => signIn(provider.id)}
-                        className="flex w-full items-center px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                        </svg>
-                        <span className="font-medium">Sign in with {provider.name}</span>
-                      </button>
-                    ))}
+                    <div className="px-4 py-2">
+                      <Link href="/pages/Login" className="block w-full py-2 text-center text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200 rounded-lg">
+                        Login
+                      </Link>
+                      <Link href="/pages/Register" className="block w-full py-2 text-center text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200 rounded-lg">
+                        Sign Up
+                      </Link>
+                    </div>
                   </div>
                 )}
               </>

@@ -2,17 +2,85 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [name, setName] = useState('')
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Handle registration logic here
-    console.log('Registration attempted with:', { name, email, password, confirmPassword })
+      
+    if (password !== confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
+  
+    try {
+      setIsLoading(true)
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password
+        })
+      })
+  
+      const data = await res.json()
+  
+      if (!res.ok) {
+        throw new Error(data.message || 'Something went wrong')
+      }
+  
+      // Add a small delay before signing in to ensure the user is created
+      await new Promise(resolve => setTimeout(resolve, 500))
+  
+      // Sign in with credentials
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false // Change this to false to handle redirect manually
+      })
+  
+      if (result?.error) {
+        setError(result.error)
+      } else {
+        // Manually redirect on success
+        window.location.href = '/'
+      }
+  
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoading(true)
+      const result = await signIn('google', {
+        callbackUrl: '/',
+        redirect: true
+      })
+      
+      if (result?.error) {
+        setError(result.error)
+      }
+    } catch (error) {
+      setError('An error occurred during sign in')
+      console.error('Sign in error:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -33,11 +101,18 @@ export default function RegisterPage() {
           </h2>
           <p className="mt-2 text-sm text-gray-300">
             Already have an account?{' '}
-            <Link href="/login" className="font-medium text-red-500 hover:text-red-400 transition-colors">
+            <Link href="/pages/Login" className="font-medium text-red-500 hover:text-red-400 transition-colors">
               Sign in here
             </Link>
           </p>
         </div>
+
+        {error && (
+          <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg">
+            {error}
+          </div>
+        )}
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
@@ -95,12 +170,32 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <div>
+          <div className="space-y-4">
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all transform hover:scale-[1.02]"
+              disabled={isLoading}
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create Account
+              {isLoading ? 'Creating Account...' : 'Create Account'}
+            </button>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white/20"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 text-gray-300 bg-[#000000] bg-opacity-90">Or continue with</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleGoogleSignIn}
+              disabled={isLoading}
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-white/20 rounded-lg bg-white/10 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Image src="/google.svg" alt="Google" width={20} height={20} />
+              Sign up with Google
             </button>
           </div>
         </form>
