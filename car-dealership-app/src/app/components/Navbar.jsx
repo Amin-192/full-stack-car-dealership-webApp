@@ -183,11 +183,11 @@ export default function Navbar() {
         <div className="md:hidden bg-black/95 backdrop-blur-sm">
           <div className="px-4 pt-2 pb-4 space-y-1">
             <Link href='/' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Home</Link>
-            <Link href='/inventory' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Inventory</Link>
-            <Link href='/categories' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Categories</Link>
-            <Link href='/featured' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Featured</Link>
-            <Link href='/about' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>About Us</Link>
-            <Link href='/contact' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Contact</Link>
+            <Link href='/' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Inventory</Link>
+            <Link href='/' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Categories</Link>
+            <Link href='/' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Featured</Link>
+            <Link href='/' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>About Us</Link>
+            <Link href='/' className='block px-3 py-2 text-white hover:bg-red-500 rounded-lg'>Contact</Link>
             <div className='pt-2'>
               <input
                 type="text"

@@ -8,7 +8,7 @@ const handler = NextAuth({
         GoogleProvider({
             clientId: process.env.GOOGLE_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        })
+        }),
     ],
     callbacks: {
         async session({ session }) {
@@ -20,34 +20,32 @@ const handler = NextAuth({
                 }
                 return session;
             } catch (error) {
-                console.log("Session error:", error);
-                return session;
+                console.error("Session error:", error);
+                return Promise.reject(new Error("Failed to fetch session"));
             }
         },
         async signIn({ profile }) {
             try {
                 await connectToDb();
-                
                 const userExists = await User.findOne({ email: profile.email });
                 
                 if (!userExists) {
                     await User.create({
                         email: profile.email,
-                        userName: profile.name.replace(/\s+/g, '').toLowerCase(),
-                        image: profile.picture
+                        userName: profile.name.replace(/\s+/g, '').toLowerCase(), // or rename to `username`
+                        image: profile.picture,
                     });
                 }
-                
                 return true;
             } catch (error) {
-                console.log("SignIn error:", error);
-                return false;
+                console.error("SignIn error:", error);
+                return Promise.resolve(false);
             }
-        }
+        },
     },
     secret: process.env.NEXTAUTH_SECRET,
     pages: {
-        signIn: '/pages/Login',
+        signIn: '/Login',
     },
 });
 
