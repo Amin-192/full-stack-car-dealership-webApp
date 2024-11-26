@@ -47,19 +47,19 @@ export default function Navbar() {
               <Link href='/' className='hover:text-red-500 transition-colors font-medium hover:scale-105 inline-block'>Home</Link>
             </li>
             <li>
-              <Link href='/inventory' className='hover:text-red-500 transition-colors font-medium hover:scale-105 inline-block'>Inventory</Link>
+              <Link href='/' className='hover:text-red-500 transition-colors font-medium hover:scale-105 inline-block'>Inventory</Link>
             </li>
             <li>
-              <Link href='/categories' className='hover:text-red-500 transition-colors font-medium hover:scale-105 inline-block'>Categories</Link>
+              <Link href='/' className='hover:text-red-500 transition-colors font-medium hover:scale-105 inline-block'>Categories</Link>
             </li>
             <li>
-              <Link href='/featured' className='hover:text-red-500 transition-colors font-medium hover:scale-105 inline-block'>Featured</Link>
+              <Link href='/' className='hover:text-red-500 transition-colors font-medium hover:scale-105 inline-block'>Featured</Link>
             </li>
             <li>
-              <Link href='/about' className='hover:text-red-500 transition-colors font-medium hover:scale-105 inline-block'>About Us</Link>
+              <Link href='/' className='hover:text-red-500 transition-colors font-medium hover:scale-105 inline-block'>About Us</Link>
             </li>
             <li>
-              <Link href='/contact' className='hover:text-red-500 transition-colors font-medium hover:scale-105 inline-block'>Contact</Link>
+              <Link href='/' className='hover:text-red-500 transition-colors font-medium hover:scale-105 inline-block'>Contact</Link>
             </li>
           </ul>
         </div>
@@ -91,7 +91,7 @@ export default function Navbar() {
           <div className='relative'>
             {session ? (
               <div className='flex items-center gap-4'>
-                <span className='text-sm'>{session.user.name}</span>
+               
                 <button
                   onClick={() => handleMenuToggle('auth')}
                   className='hover:text-red-500 transition-colors p-2 hover:bg-white/10 rounded-full'

@@ -23,7 +23,7 @@ export default function Page() {
                     Featured
                   </div>
                   <Image
-                    src={''}
+                    src={'/hero.png'}
                     alt={`Featured car ${item}`}
                     fill
                     className="object-cover"
@@ -36,7 +36,7 @@ export default function Page() {
                     <p className="text-2xl font-bold text-red-600">$50,000</p>
                   </div>
                   <Link 
-                    href={`/car/${item}`}
+                    href={'/pages/login'}
                     className="block text-center bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors"
                   >
                     View Details

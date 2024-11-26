@@ -7,7 +7,7 @@ export default function Hero() {
        {/* Hero Section */}
        <section className="relative h-[90vh] flex items-center justify-center">
         <Image
-          src=""
+          src="/banner.png"
           alt="Luxury car"
           fill
           className="object-cover"
@@ -18,7 +18,7 @@ export default function Hero() {
           <h1 className="text-6xl font-bold mb-6 leading-tight">Find Your Perfect Luxury Vehicle</h1>
           <p className="text-2xl mb-10 text-gray-200">Discover our exclusive collection of premium vehicles</p>
           <Link 
-            href="/inventory" 
+            href="/pages/login" 
             className="bg-red-600 hover:bg-red-700 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105"
           >
             Explore Collection

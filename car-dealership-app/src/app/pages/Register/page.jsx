@@ -5,64 +5,8 @@ import Link from 'next/link'
 import { signIn } from 'next-auth/react'
 
 export default function RegisterPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [name, setName] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-      
-    if (password !== confirmPassword) {
-      setError('Passwords do not match')
-      return
-    }
-  
-    try {
-      setIsLoading(true)
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password
-        })
-      })
-  
-      const data = await res.json()
-  
-      if (!res.ok) {
-        throw new Error(data.message || 'Something went wrong')
-      }
-  
-      // Add a small delay before signing in to ensure the user is created
-      await new Promise(resolve => setTimeout(resolve, 500))
-  
-      // Sign in with credentials
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false // Change this to false to handle redirect manually
-      })
-  
-      if (result?.error) {
-        setError(result.error)
-      } else {
-        // Manually redirect on success
-        window.location.href = '/pages/Login'
-      }
-  
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
   const handleGoogleSignIn = async () => {
     try {
@@ -113,7 +57,7 @@ export default function RegisterPage() {
           </div>
         )}
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="name" className="sr-only">Full Name</label>
@@ -122,8 +66,6 @@ export default function RegisterPage() {
                 name="name"
                 type="text"
                 required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
                 className="appearance-none relative block w-full px-4 py-3 border border-white/20 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                 placeholder="Full Name"
               />
@@ -136,8 +78,6 @@ export default function RegisterPage() {
                 type="email"
                 autoComplete="email"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 className="appearance-none relative block w-full px-4 py-3 border border-white/20 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                 placeholder="Email address"
               />
@@ -149,8 +89,6 @@ export default function RegisterPage() {
                 name="password"
                 type="password"
                 required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 className="appearance-none relative block w-full px-4 py-3 border border-white/20 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                 placeholder="Password"
               />
@@ -162,8 +100,6 @@ export default function RegisterPage() {
                 name="confirmPassword"
                 type="password"
                 required
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="appearance-none relative block w-full px-4 py-3 border border-white/20 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                 placeholder="Confirm Password"
               />
