@@ -7,35 +7,56 @@ import { signIn } from 'next-auth/react'
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Handle login logic here
-    console.log('Login attempted with:', email, password)
-  }
+    try {
+      setIsLoading(true)
+      setError('')
 
-  const [error, setError] = useState('');
+      // Log the attempt
+      console.log('Attempting login with:', email)
 
-  const [isLoading, setIsLoading] = useState(false);
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false
+      })
 
-const handleGoogleSignIn = async () => {
-  try {
-    setIsLoading(true);
-    const result = await signIn('google', {
-      callbackUrl: '/',
-      redirect: true
-    });
-    
-    if (result?.error) {
-      setError(result.error);
+      console.log('Login result:', result)
+
+      if (result?.error) {
+        setError(result.error)
+      } else {
+        // Successful login
+        window.location.href = '/'
+      }
+    } catch (error) {
+      console.error('Login error:', error)
+      setError('An error occurred during sign in')
+    } finally {
+      setIsLoading(false)
     }
-  } catch (error) {
-    setError('An error occurred during sign in');
-    console.error('Sign in error:', error);
-  } finally {
-    setIsLoading(false);
   }
-}
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoading(true)
+      await signIn('google', {
+        callbackUrl: '/',
+        redirect: true
+      })
+    } catch (error) {
+      console.error('Google sign in error:', error)
+      setError('An error occurred during Google sign in')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Rest of your component remains the same
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black py-12 px-4 sm:px-6 lg:px-8 mt-10">

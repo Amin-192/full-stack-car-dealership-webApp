@@ -7,15 +7,21 @@ const userSchema = new Schema({
         unique: [true, 'Email already exists'],
         lowercase: true
     },
-    userName: {
+    name: {
         type: String,
-        required: [true, 'Username is required'],
-        // Removed the strict regex to allow Google-generated usernames
-        lowercase: true
+        required: [true, 'Name is required']
+    },
+    password: {
+        type: String,
+        required: [true, 'Password is required']
     },
     image: {
         type: String,
         default: '/user.png'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 });
 

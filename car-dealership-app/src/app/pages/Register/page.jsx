@@ -54,7 +54,7 @@ export default function RegisterPage() {
         setError(result.error)
       } else {
         // Manually redirect on success
-        window.location.href = '/'
+        window.location.href = '/pages/Login'
       }
   
     } catch (err) {
